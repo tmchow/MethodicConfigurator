@@ -296,33 +296,26 @@ RC_PROTOCOLS_DICT: dict[str, dict[str, Union[tuple[str, ...], str]]] = {
 ESC_TELEMETRY_DICT: dict[str, dict[str, Union[tuple[str, ...], str]]] = {
     # No ESC->FC telemetry.  Valid for any FC->ESC Connection type/protocol.
     "0": {"type": ("None",), "protocol": "None"},
-
     # Telemetry is carried back on the same Main Out or AIO wire using the BDShot protocol.
     # Only valid when FC->ESC Connection protocol is a DShot variant (is_dshot=True).
     "1": {"type": PWM_OUT_PORTS, "protocol": "BDShot"},
-
     # A dedicated SERIAL port carries telemetry from the ESC back to the FC.
     # Valid when FC->ESC Connection type is Main Out or AIO (any protocol: Normal, DShot, etc.).
     # The SERIAL port used here is independent of the PWM output pins.
     "2": {"type": SERIAL_PORTS, "protocol": "ESC Telemetry"},
-
     # A dedicated SERIAL port carries telemetry handled by an ArduPilot Lua script (for example: T-Motor/Hobbywing Datalink v2)
     # Valid when FC->ESC Connection type is Main Out or AIO.
     # The SERIAL port used here is independent of the Main Out or AIO output pins.
     "3": {"type": SERIAL_PORTS, "protocol": "Scripting"},
-
     # Telemetry is carried on the same SERIAL port as the FC->ESC control traffic.
     # Only valid when FC->ESC Connection protocol is FETtecOneWire (same port, same protocol).
     "4": {"type": SERIAL_PORTS, "protocol": "FETtecOneWire"},
-
     # Telemetry is carried on the same SERIAL port as the FC->ESC control traffic.
     # Only valid when FC->ESC Connection protocol is Torqeedo (same port, same protocol).
     "5": {"type": SERIAL_PORTS, "protocol": "Torqeedo"},
-
     # Telemetry is carried on the same SERIAL port as the FC->ESC control traffic.
     # Only valid when FC->ESC Connection protocol is CoDevESC (same port, same protocol).
     "6": {"type": SERIAL_PORTS, "protocol": "CoDevESC"},
-
     # Telemetry is carried on the same CAN bus as the FC->ESC control traffic.
     # Only valid when FC->ESC Connection type is CAN (same port, same protocol).
     "8": {"type": CAN_PORTS, "protocol": "DroneCAN"},
