@@ -26,7 +26,9 @@ from ardupilot_methodic_configurator.common_arguments import add_common_argument
 from ardupilot_methodic_configurator.data_model_vehicle_components_base import ComponentPath
 from ardupilot_methodic_configurator.data_model_vehicle_components_validation import (
     BATTERY_CELL_VOLTAGE_PATHS,
+    CAN_PORTS,
     FC_CONNECTION_TYPE_PATHS,
+    SERIAL_PORTS,
     get_connection_type_tuples_with_labels,
 )
 from ardupilot_methodic_configurator.frontend_tkinter_component_editor_base import ComponentEditorWindowBase, EntryWidget
@@ -96,15 +98,77 @@ class ComponentEditorWindow(ComponentEditorWindowBase):
             if mcu.upper() in ("STM32F4XX", "STM32F7XX", "STM32H7XX"):
                 self.data_model.schema.modify_schema_for_mcu_series(is_optional=True)
 
+    def populate_frames(self) -> None:
+        """Populate frames and then apply initial mirror state for ESC->FC Telemetry comboboxes."""
+        super().populate_frames()
+        fc_esc_conn_type = str(self.data_model.get_component_value(("ESC", "FC->ESC Connection", "Type")) or "")
+        self._set_esc_telemetry_combobox_mirror_state(fc_esc_conn_type)
+
     def update_component_protocol_combobox_entries(self, component_path: ComponentPath, connection_type: str) -> str:
         """Updates the Protocol combobox entries based on the selected component connection Type."""
         self.data_model.set_component_value(component_path, connection_type)
 
         # when the connection Type changes, we need to update the Protocol combobox entries
         protocol_path: ComponentPath = (component_path[0], component_path[1], "Protocol")
-        return self.update_protocol_combobox_entries(
+        err_msg = self.update_protocol_combobox_entries(
             self.data_model.get_combobox_values_for_path(protocol_path), protocol_path
         )
+
+        # When FC->ESC Connection Type changes, also cascade-update ESC->FC Telemetry comboboxes
+        # (the data model already computed the new choices in _update_possible_choices_for_path)
+        if component_path == ("ESC", "FC->ESC Connection", "Type"):
+            telemetry_type_path: ComponentPath = ("ESC", "ESC->FC Telemetry", "Type")
+            err_msg += self.update_protocol_combobox_entries(
+                self.data_model.get_combobox_values_for_path(telemetry_type_path), telemetry_type_path
+            )
+            telemetry_protocol_path: ComponentPath = ("ESC", "ESC->FC Telemetry", "Protocol")
+            err_msg += self.update_protocol_combobox_entries(
+                self.data_model.get_combobox_values_for_path(telemetry_protocol_path), telemetry_protocol_path
+            )
+            # For SERIAL/CAN the telemetry uses the same port — mirror both comboboxes
+            # (FC->ESC Protocol to ESC->FC Protocol so the displayed value is also updated).
+            # For PWM/None the user can independently choose the back-channel — unmirror them.
+            self._set_esc_telemetry_combobox_mirror_state(connection_type)
+            if connection_type in SERIAL_PORTS or connection_type in CAN_PORTS:
+                current_fc_esc_protocol = str(
+                    self.data_model.get_component_value(("ESC", "FC->ESC Connection", "Protocol")) or ""
+                )
+                self._on_esc_fc_protocol_changed(current_fc_esc_protocol)
+
+        return err_msg
+
+    def _set_esc_telemetry_combobox_mirror_state(self, fc_esc_conn_type: str) -> None:
+        """Mirror (grey-out) or unmirror ESC->FC Telemetry comboboxes based on FC->ESC Connection Type."""
+        mirrored = fc_esc_conn_type in SERIAL_PORTS or fc_esc_conn_type in CAN_PORTS
+        state = "disabled" if mirrored else "readonly"
+        for telem_path in (
+            ("ESC", "ESC->FC Telemetry", "Type"),
+            ("ESC", "ESC->FC Telemetry", "Protocol"),
+        ):
+            widget = self.entry_widgets.get(telem_path)
+            if isinstance(widget, PairTupleCombobox):
+                widget.configure(state=state)
+
+    def _on_esc_fc_protocol_changed(self, new_protocol: str) -> None:
+        """Mirror FC->ESC Protocol to ESC->FC Telemetry Protocol when the connection is SERIAL or CAN."""
+        fc_esc_conn_type = str(self.data_model.get_component_value(("ESC", "FC->ESC Connection", "Type")) or "")
+        telem_protocol_path: ComponentPath = ("ESC", "ESC->FC Telemetry", "Protocol")
+        if fc_esc_conn_type in SERIAL_PORTS or fc_esc_conn_type in CAN_PORTS:
+            # Telemetry protocol must track the FC->ESC protocol; update data model and widget.
+            self.data_model.set_component_value(telem_protocol_path, new_protocol)
+            widget = self.entry_widgets.get(telem_protocol_path)
+            if isinstance(widget, PairTupleCombobox):
+                widget.set_entries_tuple([(new_protocol, new_protocol)], new_protocol)
+                widget.configure(state="disabled")
+                widget.update_idletasks()
+        else:
+            # PWM: unmirror and refresh with all available choices.
+            self.update_protocol_combobox_entries(
+                self.data_model.get_combobox_values_for_path(telem_protocol_path), telem_protocol_path
+            )
+            widget = self.entry_widgets.get(telem_protocol_path)
+            if isinstance(widget, PairTupleCombobox):
+                widget.configure(state="readonly")
 
     def update_protocol_combobox_entries(self, protocols: tuple[str, ...], protocol_path: ComponentPath) -> str:
         err_msg = ""
@@ -222,6 +286,15 @@ class ComponentEditorWindow(ComponentEditorWindowBase):
                 cb.bind(
                     "<<ComboboxSelected>>",
                     lambda _event: self.update_component_protocol_combobox_entries(path, cb.get_selected_key() or ""),
+                )
+
+            # When FC->ESC Connection Protocol changes on a SERIAL/CAN connection, mirror it to
+            # ESC->FC Telemetry Protocol and keep it mirrored; on PWM it stays user-selectable.
+            if path == ("ESC", "FC->ESC Connection", "Protocol"):
+                cb.bind(
+                    "<<ComboboxSelected>>",
+                    lambda _event: self._on_esc_fc_protocol_changed(cb.get_selected_key() or ""),
+                    add="+",
                 )
 
             # When battery chemistry changes, the max, low and crit voltages will change to the
