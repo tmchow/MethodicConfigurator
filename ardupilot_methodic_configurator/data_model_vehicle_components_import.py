@@ -26,7 +26,7 @@ from ardupilot_methodic_configurator.data_model_vehicle_components_base import C
 from ardupilot_methodic_configurator.data_model_vehicle_components_validation import (
     BATT_MONITOR_CONNECTION,
     CAN_PORTS,
-    ESC_TELEMETRY_PROTOCOLS,
+    ESC_TELEMETRY_ONLY_PROTOCOLS,
     GNSS_RECEIVER_CONNECTION,
     I2C_PORTS,
     RC_PROTOCOLS_DICT,
@@ -330,7 +330,7 @@ class ComponentDataModelImport(ComponentDataModelBase):
                     self.set_component_value(("GNSS Receiver", "FC Connection", "Type"), serial)
                 gnss += 1
             elif component == "ESC":
-                if protocol in ESC_TELEMETRY_PROTOCOLS:
+                if protocol in ESC_TELEMETRY_ONLY_PROTOCOLS:
                     # Serial ESC->FC telemetry only (DShot with UART feedback, or Hobbywing Datalink v2).
                     # FC->ESC connection is still PWM/DShot; _set_esc_type_from_fc_parameters handles it.
                     # Do NOT increment esc so that function is still called.

@@ -98,57 +98,69 @@ BATTERY_CELL_VOLTAGE_PATHS: list[ComponentPath] = [
 
 # Protocol dictionaries
 SERIAL_PROTOCOLS_DICT: dict[str, dict[str, Any]] = {
-    "-1": {"type": ("None",), "protocol": "None", "component": None},
-    "1": {"type": SERIAL_PORTS, "protocol": "MAVLink1", "component": "Telemetry"},
-    "2": {"type": SERIAL_PORTS, "protocol": "MAVLink2", "component": "Telemetry"},
-    "3": {"type": SERIAL_PORTS, "protocol": "Frsky D", "component": None},
-    "4": {"type": SERIAL_PORTS, "protocol": "Frsky SPort", "component": None},
-    "5": {"type": SERIAL_PORTS, "protocol": "GPS", "component": "GNSS Receiver"},
-    "7": {"type": SERIAL_PORTS, "protocol": "Alexmos Gimbal Serial", "component": None},
-    "8": {"type": SERIAL_PORTS, "protocol": "Gimbal", "component": None},
-    "9": {"type": SERIAL_PORTS, "protocol": "Rangefinder", "component": None},
-    "10": {"type": SERIAL_PORTS, "protocol": "FrSky SPort Passthrough (OpenTX)", "component": None},
-    "11": {"type": SERIAL_PORTS, "protocol": "Lidar360", "component": None},
-    "13": {"type": SERIAL_PORTS, "protocol": "Beacon", "component": None},
-    "14": {"type": SERIAL_PORTS, "protocol": "Volz servo out", "component": None},
-    "15": {"type": SERIAL_PORTS, "protocol": "SBus servo out", "component": None},
-    "16": {"type": SERIAL_PORTS, "protocol": "ESC Telemetry", "component": "ESC"},
-    "17": {"type": SERIAL_PORTS, "protocol": "Devo Telemetry", "component": None},
-    "18": {"type": SERIAL_PORTS, "protocol": "OpticalFlow", "component": None},
-    "19": {"type": SERIAL_PORTS, "protocol": "RobotisServo", "component": None},
-    "20": {"type": SERIAL_PORTS, "protocol": "NMEA Output", "component": None},
-    "21": {"type": SERIAL_PORTS, "protocol": "WindVane", "component": None},
-    "22": {"type": SERIAL_PORTS, "protocol": "SLCAN", "component": None},
-    "23": {"type": SERIAL_PORTS, "protocol": "RCIN", "component": "RC Receiver"},
-    "24": {"type": SERIAL_PORTS, "protocol": "EFI Serial", "component": None},
-    "25": {"type": SERIAL_PORTS, "protocol": "LTM", "component": None},
-    "26": {"type": SERIAL_PORTS, "protocol": "RunCam", "component": None},
-    "27": {"type": SERIAL_PORTS, "protocol": "HottTelem", "component": None},
-    "28": {"type": SERIAL_PORTS, "protocol": "Scripting", "component": "ESC"},
-    "29": {"type": SERIAL_PORTS, "protocol": "Crossfire VTX", "component": None},
-    "30": {"type": SERIAL_PORTS, "protocol": "Generator", "component": None},
-    "31": {"type": SERIAL_PORTS, "protocol": "Winch", "component": None},
-    "32": {"type": SERIAL_PORTS, "protocol": "MSP", "component": None},
-    "33": {"type": SERIAL_PORTS, "protocol": "DJI FPV", "component": None},
-    "34": {"type": SERIAL_PORTS, "protocol": "AirSpeed", "component": None},
-    "35": {"type": SERIAL_PORTS, "protocol": "ADSB", "component": None},
-    "36": {"type": SERIAL_PORTS, "protocol": "AHRS", "component": None},
-    "37": {"type": SERIAL_PORTS, "protocol": "SmartAudio", "component": None},
-    "38": {"type": SERIAL_PORTS, "protocol": "FETtecOneWire", "component": "ESC"},
-    "39": {"type": SERIAL_PORTS, "protocol": "Torqeedo", "component": "ESC"},
-    "40": {"type": SERIAL_PORTS, "protocol": "AIS", "component": None},
-    "41": {"type": SERIAL_PORTS, "protocol": "CoDevESC", "component": "ESC"},
-    "42": {"type": SERIAL_PORTS, "protocol": "DisplayPort", "component": None},
-    "43": {"type": SERIAL_PORTS, "protocol": "MAVLink High Latency", "component": "Telemetry"},
-    "44": {"type": SERIAL_PORTS, "protocol": "IRC Tramp", "component": None},
-    "45": {"type": SERIAL_PORTS, "protocol": "DDS XRCE", "component": None},
-    "46": {"type": SERIAL_PORTS, "protocol": "IMUDATA", "component": None},
-    "48": {"type": SERIAL_PORTS, "protocol": "PPP", "component": "Telemetry"},
-    "49": {"type": SERIAL_PORTS, "protocol": "i-BUS Telemetry", "component": None},
+    "-1": {"type": ("None",), "protocol": "None", "component": None, "telemetry_only": False},
+    "1": {"type": SERIAL_PORTS, "protocol": "MAVLink1", "component": "Telemetry", "telemetry_only": False},
+    "2": {"type": SERIAL_PORTS, "protocol": "MAVLink2", "component": "Telemetry", "telemetry_only": False},
+    "3": {"type": SERIAL_PORTS, "protocol": "Frsky D", "component": None, "telemetry_only": False},
+    "4": {"type": SERIAL_PORTS, "protocol": "Frsky SPort", "component": None, "telemetry_only": False},
+    "5": {"type": SERIAL_PORTS, "protocol": "GPS", "component": "GNSS Receiver", "telemetry_only": False},
+    "7": {"type": SERIAL_PORTS, "protocol": "Alexmos Gimbal Serial", "component": None, "telemetry_only": False},
+    "8": {"type": SERIAL_PORTS, "protocol": "Gimbal", "component": None, "telemetry_only": False},
+    "9": {"type": SERIAL_PORTS, "protocol": "Rangefinder", "component": None, "telemetry_only": False},
+    "10": {"type": SERIAL_PORTS, "protocol": "FrSky SPort Passthrough (OpenTX)", "component": None, "telemetry_only": False},
+    "11": {"type": SERIAL_PORTS, "protocol": "Lidar360", "component": None, "telemetry_only": False},
+    "13": {"type": SERIAL_PORTS, "protocol": "Beacon", "component": None, "telemetry_only": False},
+    "14": {"type": SERIAL_PORTS, "protocol": "Volz servo out", "component": None, "telemetry_only": False},
+    "15": {"type": SERIAL_PORTS, "protocol": "SBus servo out", "component": None, "telemetry_only": False},
+    "16": {"type": SERIAL_PORTS, "protocol": "ESC Telemetry", "component": "ESC", "telemetry_only": True},
+    "17": {"type": SERIAL_PORTS, "protocol": "Devo Telemetry", "component": None, "telemetry_only": False},
+    "18": {"type": SERIAL_PORTS, "protocol": "OpticalFlow", "component": None, "telemetry_only": False},
+    "19": {"type": SERIAL_PORTS, "protocol": "RobotisServo", "component": None, "telemetry_only": False},
+    "20": {"type": SERIAL_PORTS, "protocol": "NMEA Output", "component": None, "telemetry_only": False},
+    "21": {"type": SERIAL_PORTS, "protocol": "WindVane", "component": None, "telemetry_only": False},
+    "22": {"type": SERIAL_PORTS, "protocol": "SLCAN", "component": None, "telemetry_only": False},
+    "23": {"type": SERIAL_PORTS, "protocol": "RCIN", "component": "RC Receiver", "telemetry_only": False},
+    "24": {"type": SERIAL_PORTS, "protocol": "EFI Serial", "component": None, "telemetry_only": False},
+    "25": {"type": SERIAL_PORTS, "protocol": "LTM", "component": None, "telemetry_only": False},
+    "26": {"type": SERIAL_PORTS, "protocol": "RunCam", "component": None, "telemetry_only": False},
+    "27": {"type": SERIAL_PORTS, "protocol": "HottTelem", "component": None, "telemetry_only": False},
+    "28": {"type": SERIAL_PORTS, "protocol": "Scripting", "component": "ESC", "telemetry_only": True},
+    "29": {"type": SERIAL_PORTS, "protocol": "Crossfire VTX", "component": None, "telemetry_only": False},
+    "30": {"type": SERIAL_PORTS, "protocol": "Generator", "component": None, "telemetry_only": False},
+    "31": {"type": SERIAL_PORTS, "protocol": "Winch", "component": None, "telemetry_only": False},
+    "32": {"type": SERIAL_PORTS, "protocol": "MSP", "component": None, "telemetry_only": False},
+    "33": {"type": SERIAL_PORTS, "protocol": "DJI FPV", "component": None, "telemetry_only": False},
+    "34": {"type": SERIAL_PORTS, "protocol": "AirSpeed", "component": None, "telemetry_only": False},
+    "35": {"type": SERIAL_PORTS, "protocol": "ADSB", "component": None, "telemetry_only": False},
+    "36": {"type": SERIAL_PORTS, "protocol": "AHRS", "component": None, "telemetry_only": False},
+    "37": {"type": SERIAL_PORTS, "protocol": "SmartAudio", "component": None, "telemetry_only": False},
+    "38": {"type": SERIAL_PORTS, "protocol": "FETtecOneWire", "component": "ESC", "telemetry_only": False},
+    "39": {"type": SERIAL_PORTS, "protocol": "Torqeedo", "component": "ESC", "telemetry_only": False},
+    "40": {"type": SERIAL_PORTS, "protocol": "AIS", "component": None, "telemetry_only": False},
+    "41": {"type": SERIAL_PORTS, "protocol": "CoDevESC", "component": "ESC", "telemetry_only": False},
+    "42": {"type": SERIAL_PORTS, "protocol": "DisplayPort", "component": None, "telemetry_only": False},
+    "43": {"type": SERIAL_PORTS, "protocol": "MAVLink High Latency", "component": "Telemetry", "telemetry_only": False},
+    "44": {"type": SERIAL_PORTS, "protocol": "IRC Tramp", "component": None, "telemetry_only": False},
+    "45": {"type": SERIAL_PORTS, "protocol": "DDS XRCE", "component": None, "telemetry_only": False},
+    "46": {"type": SERIAL_PORTS, "protocol": "IMUDATA", "component": None, "telemetry_only": False},
+    "48": {"type": SERIAL_PORTS, "protocol": "PPP", "component": "Telemetry", "telemetry_only": False},
+    "49": {"type": SERIAL_PORTS, "protocol": "i-BUS Telemetry", "component": None, "telemetry_only": False},
 }
 
-# ESC protocol constants
-ESC_TELEMETRY_PROTOCOLS = {"ESC Telemetry", "Scripting"}  # Serial telemetry-only protocols
+# Serial telemetry-only protocols
+ESC_TELEMETRY_ONLY_PROTOCOLS: frozenset[str] = frozenset(
+    str(v["protocol"])
+    for v in SERIAL_PROTOCOLS_DICT.values()
+    if v.get("component") == "ESC" and v.get("telemetry_only") is True
+)
+
+# Protocols where FC->ESC and ESC->FC Telemetry share the same SERIAL port.
+# The ESC->FC Telemetry protocol is implicitly determined by (and must match) the FC->ESC Connection protocol.
+ESC_SERIAL_SAME_PORT_PROTOCOLS: frozenset[str] = frozenset(
+    str(v["protocol"])
+    for v in SERIAL_PROTOCOLS_DICT.values()
+    if v.get("component") == "ESC" and v.get("telemetry_only") is False
+)
 
 BATT_MONITOR_CONNECTION: dict[str, dict[str, Union[tuple[str, ...], str]]] = {
     "0": {"type": ("None",), "protocol": "Disabled"},
@@ -284,42 +296,37 @@ RC_PROTOCOLS_DICT: dict[str, dict[str, Union[tuple[str, ...], str]]] = {
 ESC_TELEMETRY_DICT: dict[str, dict[str, Union[tuple[str, ...], str]]] = {
     # No ESC->FC telemetry.  Valid for any FC->ESC Connection type/protocol.
     "0": {"type": ("None",), "protocol": "None"},
+
+    # Telemetry is carried back on the same Main Out or AIO wire using the BDShot protocol.
+    # Only valid when FC->ESC Connection protocol is a DShot variant (is_dshot=True).
+    "1": {"type": PWM_OUT_PORTS, "protocol": "BDShot"},
+
     # A dedicated SERIAL port carries telemetry from the ESC back to the FC.
     # Valid when FC->ESC Connection type is Main Out or AIO (any protocol: Normal, DShot, etc.).
     # The SERIAL port used here is independent of the PWM output pins.
-    "1": {"type": SERIAL_PORTS, "protocol": "ESC Telemetry"},
-    # Telemetry is carried back on the same Main Out or AIO wire using the BDShot protocol.
-    # Only valid when FC->ESC Connection protocol is a DShot variant (is_dshot=True).
-    "2": {"type": PWM_OUT_PORTS, "protocol": "BDShot"},
-    # Telemetry is carried on the same CAN bus as the FC->ESC control traffic.
-    # Only valid when FC->ESC Connection type is CAN (same port, same protocol).
-    "3": {"type": CAN_PORTS, "protocol": "DroneCAN"},
-    # Telemetry is carried on the same SERIAL port as the FC->ESC control traffic.
-    # Only valid when FC->ESC Connection protocol is FETtecOneWire (same port).
-    "4": {"type": SERIAL_PORTS, "protocol": "FETtecOneWire"},
-    # Telemetry is carried on the same SERIAL port as the FC->ESC control traffic.
-    # Only valid when FC->ESC Connection protocol is Torqeedo (same port).
-    "5": {"type": SERIAL_PORTS, "protocol": "Torqeedo"},
-    # Telemetry is carried on the same SERIAL port as the FC->ESC control traffic.
-    # Only valid when FC->ESC Connection protocol is CoDevESC (same port).
-    "6": {"type": SERIAL_PORTS, "protocol": "CoDevESC"},
+    "2": {"type": SERIAL_PORTS, "protocol": "ESC Telemetry"},
+
     # A dedicated SERIAL port carries telemetry handled by an ArduPilot Lua script (for example: T-Motor/Hobbywing Datalink v2)
     # Valid when FC->ESC Connection type is Main Out or AIO.
     # The SERIAL port used here is independent of the Main Out or AIO output pins.
-    "7": {"type": SERIAL_PORTS, "protocol": "Scripting"},
-}
+    "3": {"type": SERIAL_PORTS, "protocol": "Scripting"},
 
-# Protocols where FC->ESC and ESC->FC Telemetry share the same SERIAL port.
-# The ESC->FC Telemetry protocol is implicitly determined by (and must match) the FC->ESC Connection protocol.
-# Derived from ESC_TELEMETRY_DICT: SERIAL-type entries that are NOT receive-only (i.e. not in ESC_TELEMETRY_PROTOCOLS).
-ESC_SERIAL_SAME_PORT_PROTOCOLS: frozenset[str] = frozenset(
-    str(v["protocol"])
-    for v in ESC_TELEMETRY_DICT.values()
-    if isinstance(v["type"], tuple)
-    and bool(set(v["type"]) & set(SERIAL_PORTS))
-    and str(v["protocol"]) not in ESC_TELEMETRY_PROTOCOLS
-    and str(v["protocol"]) != "None"
-)
+    # Telemetry is carried on the same SERIAL port as the FC->ESC control traffic.
+    # Only valid when FC->ESC Connection protocol is FETtecOneWire (same port, same protocol).
+    "4": {"type": SERIAL_PORTS, "protocol": "FETtecOneWire"},
+
+    # Telemetry is carried on the same SERIAL port as the FC->ESC control traffic.
+    # Only valid when FC->ESC Connection protocol is Torqeedo (same port, same protocol).
+    "5": {"type": SERIAL_PORTS, "protocol": "Torqeedo"},
+
+    # Telemetry is carried on the same SERIAL port as the FC->ESC control traffic.
+    # Only valid when FC->ESC Connection protocol is CoDevESC (same port, same protocol).
+    "6": {"type": SERIAL_PORTS, "protocol": "CoDevESC"},
+
+    # Telemetry is carried on the same CAN bus as the FC->ESC control traffic.
+    # Only valid when FC->ESC Connection type is CAN (same port, same protocol).
+    "8": {"type": CAN_PORTS, "protocol": "DroneCAN"},
+}
 
 
 class ComponentDataModelValidation(ComponentDataModelBase):
@@ -463,7 +470,7 @@ class ComponentDataModelValidation(ComponentDataModelBase):
             self._possible_choices[protocol_path] = tuple(
                 str(v["protocol"])
                 for v in SERIAL_PROTOCOLS_DICT.values()
-                if v["component"] == "ESC" and v["protocol"] not in ESC_TELEMETRY_PROTOCOLS
+                if v["component"] == "ESC" and v["protocol"] not in ESC_TELEMETRY_ONLY_PROTOCOLS
             )
         else:
             # For PWM outputs, use motor PWM types
